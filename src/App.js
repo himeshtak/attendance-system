@@ -236,7 +236,7 @@ export default function AttendanceDashboard() {
 
   useEffect(() => {
     loadInitialData();
-  }, [loadData, subjects.length]);
+  }, []);
 
   useEffect(() => {
     if (subjects.length > 0 && selectedSection) {
