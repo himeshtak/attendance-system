@@ -242,7 +242,7 @@ export default function AttendanceDashboard() {
     if (subjects.length > 0 && selectedSection) {
       loadData();
     }
-  }, [loadData, subjects.length]);
+  }, [selectedDate, selectedSubject, selectedSection]);
 
   const loadInitialData = async () => {
     const [sects, subs] = await Promise.all([
