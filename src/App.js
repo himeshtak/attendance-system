@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { Users, TrendingUp, Filter, Download, UserCheck, UserX, BookOpen, CheckSquare, XSquare, Layout } from 'lucide-react';
 
-// Mock Backend API with Multiple Sections and Students
 class AttendanceAPI {
   constructor() {
     this.sections = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'];
