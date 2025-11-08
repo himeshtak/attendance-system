@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { Users, Calendar, TrendingUp, Clock, Filter, Download, UserCheck, UserX, BookOpen, CheckSquare, XSquare, Layout } from 'lucide-react';
+import React, { useState, useEffect, useCallback } from 'react';
+import { Users, TrendingUp, Filter, Download, UserCheck, UserX, BookOpen, CheckSquare, XSquare, Layout } from 'lucide-react';
 
 // Mock Backend API with Multiple Sections and Students
 class AttendanceAPI {
@@ -234,17 +234,7 @@ export default function AttendanceDashboard() {
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
 
-  useEffect(() => {
-    loadInitialData();
-  }, []);
-
-  useEffect(() => {
-    if (subjects.length > 0 && selectedSection) {
-      loadData();
-    }
-  }, [selectedDate, selectedSubject, selectedSection]);
-
-  const loadInitialData = async () => {
+  const loadInitialData = useCallback(async () => {
     const [sects, subs] = await Promise.all([
       api.getSections(),
       api.getSubjects()
@@ -255,9 +245,9 @@ export default function AttendanceDashboard() {
     if (subs.length > 0) {
       setSelectedSubject(subs[0].id.toString());
     }
-  };
+  }, []);
 
-  const loadData = async () => {
+  const loadData = useCallback(async () => {
     if (!selectedSubject || !selectedSection) return;
     
     setLoading(true);
@@ -271,7 +261,17 @@ export default function AttendanceDashboard() {
     setAttendance(attn);
     setStatistics(stats);
     setLoading(false);
-  };
+  }, [selectedSection, selectedDate, selectedSubject]);
+
+  useEffect(() => {
+    loadInitialData();
+  }, [loadInitialData]);
+
+  useEffect(() => {
+    if (subjects.length > 0 && selectedSection) {
+      loadData();
+    }
+  }, [selectedDate, selectedSubject, selectedSection, loadData, subjects.length]);
 
   const handleMarkAttendance = async (studentId, status) => {
     if (!selectedSubject) return;
